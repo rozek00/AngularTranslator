@@ -1,0 +1,24 @@
+.input-area {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+}
+
+.input-area label {
+  font-weight: bold;
+  margin-bottom: 8px;
+  color: #444;
+}
+
+.input-area input[type="text"] {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 14px;
+  transition: border-color 0.3s;
+}
+
+.input-area input[type="text"]:focus {
+  border-color: #4CAF50;
+  outline: none;
+}

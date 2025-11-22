@@ -1,0 +1,8 @@
+<div class="select-area">
+  <label for="language">Wybierz język docelowy:</label>
+  <select id="language" [(ngModel)]="selectedLanguage">
+    <option *ngFor="let code of languageCodes" [value]="code">
+      {{ code }} - {{ languages[code] }}
+    </option>
+  </select>
+</div>
