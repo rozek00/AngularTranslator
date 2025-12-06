@@ -1,0 +1,26 @@
+.translator-content {
+  padding: 20px;
+}
+
+.translator-content h1 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.translate-btn {
+  width: 100%;
+  padding: 12px;
+  background: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background 0.3s;
+  margin-top: 10px;
+}
+
+.translate-btn:hover {
+  background: #45a049;
+}

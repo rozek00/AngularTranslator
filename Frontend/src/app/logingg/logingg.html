@@ -1,0 +1,20 @@
+<div class="auth-card">
+	<div class="auth-grid">
+		<div class="auth-left">
+			<div class="auth-title">Logowanie</div>
+			<div class="field-block">
+				<app-loginfield (valueChanged)="handleLogin($event)"></app-loginfield>
+			</div>
+			<div class="field-block">
+				<app-passwordfield (valueChanged)="handlePassword($event)"></app-passwordfield>
+			</div>
+			<div class="auth-actions">
+				<button class="btn-primary" (click)="loggingLogic()">Zaloguj</button>
+			</div>
+		</div>
+		<div class="auth-right">
+			<p class="note">Jeżeli nie masz konta, zarejestruj się.</p>
+		</div>
+	</div>
+</div>
+

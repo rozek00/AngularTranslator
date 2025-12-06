@@ -1,0 +1,11 @@
+<div class="slot-machine-wrapper">
+  <div class="slot" [class.light-theme]="true">
+    <span [class.spinning]="spinning" [class.win]="isWin">{{ result[0] }}</span>
+    <span [class.spinning]="spinning" [class.win]="isWin">{{ result[1] }}</span>
+    <span [class.spinning]="spinning" [class.win]="isWin">{{ result[2] }}</span>
+  </div>
+
+  <button class="spin-btn" [disabled]="spinning" [class.spinning]="spinning" (click)="spin()">
+    {{ spinning ? 'Kręcenie...' : 'Zakręć' }}
+  </button>
+</div>

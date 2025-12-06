@@ -1,11 +1,17 @@
 <div class="translator-container">
-  <h1>Mini Translator</h1>
-
-  <app-original-word-area></app-original-word-area>
-
-  <app-select-language></app-select-language>
-
-  <button class="translate-btn" (click)="Translate()">Przetłumacz</button>
-
-  <app-translated-word-area [translatedText]="translatedText"></app-translated-word-area>
+  <nav>
+    @if(this.currentUrl !== '/') {
+      <a routerLink="/">Tłumacz</a>
+    } 
+    @if(this.currentUrl !== '/login') {
+      <a routerLink="/login">Zaloguj</a>
+    } 
+    @if(this.currentUrl !== '/register') {
+      <a routerLink="/register">Zarejestruj</a>
+    } 
+    @if(this.currentUrl !== '/hazard') {
+      <a routerLink="/hazard">Hazard Dla Znudzonych</a>
+    }
+  </nav>
+  <router-outlet></router-outlet>
 </div>

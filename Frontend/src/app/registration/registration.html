@@ -1,0 +1,21 @@
+<div class="auth-card">
+	<div class="auth-title">Rejestracja</div>
+	<div class="form-columns">
+		<div>
+			<div class="field-block">
+				<app-loginfield (valueChanged)="handleLogin($event)"></app-loginfield>
+			</div>
+		</div>
+		<div>
+			<div class="field-block">
+				<app-passwordfield (valueChanged)="handlePassword($event)"></app-passwordfield>
+			</div>
+			<div class="field-block">
+				<app-passwordfield (valueChanged)="handleSecondPassword($event)"></app-passwordfield>
+			</div>
+		</div>
+	</div>
+	<div class="auth-actions">
+		<button class="btn-primary" (click)="RegisterLogic()">Zarejestruj</button>
+	</div>
+</div>

@@ -1,0 +1,11 @@
+<div class="translator-content">
+  <h1>Mini Translator</h1>
+
+  <app-original-word-area></app-original-word-area>
+
+  <app-select-language></app-select-language>
+
+  <button class="translate-btn" (click)="Translate()">Przetłumacz</button>
+
+  <app-translated-word-area [translatedText]="translatedText"></app-translated-word-area>
+</div>

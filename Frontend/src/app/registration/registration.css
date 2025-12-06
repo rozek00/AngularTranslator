@@ -1,0 +1,17 @@
+:host { display: block; }
+.auth-card {
+	max-width: 840px; /* wider */
+	margin: 18px auto;
+	padding: 28px;
+	background: linear-gradient(180deg,#ffffff,#fbfbfb);
+	border-radius: 12px;
+	box-shadow: 0 8px 20px rgba(18,35,54,0.06);
+	border: 1px solid rgba(0,0,0,0.04);
+}
+.auth-title { font-size: 22px; font-weight: 700; color: #22303f; margin-bottom: 12px; }
+.form-columns { display:grid; grid-template-columns: 1fr 1fr; gap:20px; }
+.field-note { font-size: 13px; color: #667788; }
+.error-msg { color: #c0392b; font-weight:600 }
+.success-msg { color:#2e7d32; font-weight:600 }
+.btn-primary { background: linear-gradient(90deg,#1976d2,#4fc3f7); color:#fff; padding:12px 18px;border-radius:8px;border:none;cursor:pointer }
+.btn-primary:disabled{opacity:0.6}

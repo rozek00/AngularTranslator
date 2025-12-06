@@ -1,0 +1,92 @@
+/* Slot machine style for HazardDlaZnudzonych component */
+.slot-machine-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 28px;
+}
+
+.slot {
+  display: flex;
+  gap: 18px;
+  background: linear-gradient(180deg,#fff 0%, #fbfbfb 100%);
+  padding: 28px;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(13,38,63,0.06), inset 0 2px 6px rgba(255,255,255,0.6);
+  border: 6px solid #f0d58a; /* light golden frame */
+}
+
+.slot span {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 120px;
+  height: 120px;
+  font-size: 56px;
+  background: linear-gradient(180deg,#ffffff 0%, #fafafa 100%);
+  color: #222;
+  border-radius: 10px;
+  box-shadow: 0 6px 12px rgba(20,40,60,0.06), inset 0 -4px 12px rgba(0,0,0,0.02);
+  border: 3px solid rgba(200,160,80,0.22);
+  transition: transform 240ms ease, box-shadow 240ms ease;
+}
+
+.slot span:empty {
+  opacity: 0.25;
+}
+
+.slot span.win {
+  transform: scale(1.08);
+  box-shadow: 0 12px 28px rgba(34,197,94,0.15), inset 0 -6px 20px rgba(34,197,94,0.04);
+  border-color: rgba(34,197,94,0.4);
+}
+
+.spin-btn {
+  margin-top: 18px;
+  background: linear-gradient(180deg,#4facfe 0%,#00f2fe 100%);
+  color: #04203a;
+  border: none;
+  padding: 14px 32px;
+  font-weight: 700;
+  font-size: 18px;
+  border-radius: 12px;
+  cursor: pointer;
+  box-shadow: 0 10px 20px rgba(3,83,136,0.12), inset 0 -4px 12px rgba(255,255,255,0.6);
+  transition: transform 140ms ease, box-shadow 140ms ease, filter 200ms ease;
+}
+
+.spin-btn:active {
+  transform: translateY(2px) scale(0.995);
+}
+
+/* spinning visual for reels */
+.slot span.spinning{ animation: reel 90ms linear infinite; }
+
+@keyframes reel{
+  0%{ transform: translateY(0) }
+  50%{ transform: translateY(-6px) }
+  100%{ transform: translateY(0) }
+}
+
+/* button pulse while spinning */
+.spin-btn.spinning{
+  animation: pulse 900ms ease-in-out infinite;
+  filter: brightness(1.03) saturate(1.1);
+}
+
+@keyframes pulse{ from{ transform: scale(1)} 50%{ transform: scale(1.03)} to{ transform: scale(1)} }
+
+/* responsive */
+@media (max-width: 600px) {
+  .slot {
+    gap: 10px;
+    padding: 18px;
+  }
+  .slot span {
+    width: 80px;
+    height: 80px;
+    font-size: 34px;
+  }
+  .spin-btn { width: 100%; }
+}
