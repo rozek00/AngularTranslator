@@ -3,6 +3,9 @@
     @if(this.currentUrl !== '/') {
       <a routerLink="/">Tłumacz</a>
     } 
+    @if(this.currentUrl !== '/history') {
+      <a routerLink="/history">Historia</a>
+    }
     @if(this.currentUrl !== '/login') {
       <a routerLink="/login">Zaloguj</a>
     } 
