@@ -13,7 +13,7 @@ async function createUserEntity() {
         const saltRounds = parseInt(process.env.saltRounds, 10);
         const hashedPassword = await bcrypt.hash('Password123', saltRounds);
 
-        const user = new User({ email: 'jan@example.com', password: hashedPassword });
+        //const user = new User({ email: 'jan@example.com', password: hashedPassword });
         await user.save();
         console.log("Użytkownik zapisany!");
     } catch (err) {

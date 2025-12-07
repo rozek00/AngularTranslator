@@ -50,7 +50,7 @@ app.post('/login', async (req, res) => {
     try {
         const { email, password } = req.body;
         const token  = await loginUser(email, password);
-        res.status(200).json({ message: 'Zalogowano pomyślnie!', token });
+        res.status(200).json({ token });
     } catch (err) {
         res.status(400).json({ error: err.message });
     }
