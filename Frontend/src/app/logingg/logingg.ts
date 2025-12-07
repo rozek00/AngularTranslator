@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { Loginfield } from '../loginfield/loginfield';
 import { Passwordfield } from '../passwordfield/passwordfield';
+import { concatWith } from 'rxjs';
 
 @Component({
   selector: 'app-logingg',
@@ -19,6 +20,7 @@ export class Logingg {
     this.Password = val;
   }
   loggingLogic() {
-    //wasza robota
+    console.log(this.Login);
+    console.log(this.Password);
   }
 }
