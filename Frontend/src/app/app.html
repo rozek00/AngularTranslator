@@ -3,15 +3,27 @@
     @if(this.currentUrl !== '/') {
       <a routerLink="/">Tłumacz</a>
     } 
-    @if(this.currentUrl !== '/login') {
-      <a routerLink="/login">Zaloguj</a>
-    } 
-    @if(this.currentUrl !== '/register') {
-      <a routerLink="/register">Zarejestruj</a>
-    } 
+    <div *ngIf="!isLoggedIn">
+      @if(this.currentUrl !== '/login') {
+        <a routerLink="/login">Zaloguj</a>
+      } 
+      @if(this.currentUrl !== '/register') {
+        <a routerLink="/register">Zarejestruj</a>
+      } 
+    </div>  
+    <div *ngIf="isLoggedIn">
+      @if(this.currentUrl !== '/login') {
+        <a routerLink="/login">Wyloguj</a>
+      } 
+      @if(this.currentUrl !== '/register') {
+        <a routerLink="/register">Historia wyszukiwania</a>
+      } 
+    </div>  
+    <div>
     @if(this.currentUrl !== '/hazard') {
       <a routerLink="/hazard">Hazard Dla Znudzonych</a>
     }
+    </div>
   </nav>
   <router-outlet></router-outlet>
 </div>

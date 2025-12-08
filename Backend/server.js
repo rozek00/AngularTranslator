@@ -1,8 +1,10 @@
 require('dotenv').config();
+const { User } = require('./router/database/user')
+const { createUserEntity } = require('./router/db')
+const { addUser, getUsers, loginUser } = require('./controller/userController');
 const express = require('express');
 const axios = require('axios');
 const cors = require('cors');
-
 const app = express();
 app.use(cors());
 app.use(express.json());
@@ -26,4 +28,36 @@ app.post('/translate', async (req, res) => {
   }
 });
 
-app.listen(3000, () => console.log('API działa na http://localhost:3000'));
+app.get('/users', async (req, res) => {
+    try {
+        const users = await getUsers();
+        res.json(users);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+app.post('/register', async (req, res) => {
+    try {
+        const user = await addUser(req.body);
+        res.status(201).json(user);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+app.post('/login', async (req, res) => {
+    try {
+        const { email, password } = req.body;
+        const token  = await loginUser(email, password);
+        res.status(200).json({ token });
+    } catch (err) {
+        res.status(400).json({ error: err.message });
+    }
+});
+
+app.listen(3000, () => {
+    console.log(`Serwer działa na porcie 3000`);
+
+    createUserEntity();
+});
