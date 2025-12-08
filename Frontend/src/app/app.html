@@ -3,6 +3,15 @@
     @if(this.currentUrl !== '/') {
       <a routerLink="/">Tłumacz</a>
     } 
+    @if(this.currentUrl !== '/history') {
+      <a routerLink="/history">Historia</a>
+    }
+    @if(this.currentUrl !== '/login') {
+      <a routerLink="/login">Zaloguj</a>
+    } 
+    @if(this.currentUrl !== '/register') {
+      <a routerLink="/register">Zarejestruj</a>
+    } 
     <div *ngIf="!isLoggedIn">
       @if(this.currentUrl !== '/login') {
         <a routerLink="/login">Zaloguj</a>
