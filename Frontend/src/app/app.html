@@ -1,17 +1,10 @@
 <div class="translator-container">
   <nav>
-    @if(this.currentUrl !== '/') {
-      <a routerLink="/">Tłumacz</a>
-    } 
-    @if(this.currentUrl !== '/history') {
-      <a routerLink="/history">Historia</a>
-    }
-    @if(this.currentUrl !== '/login') {
-      <a routerLink="/login">Zaloguj</a>
-    } 
-    @if(this.currentUrl !== '/register') {
-      <a routerLink="/register">Zarejestruj</a>
-    } 
+    <div>
+      @if(this.currentUrl !== '/') {
+        <a routerLink="/">Tłumacz</a>
+      } 
+    </div>
     <div *ngIf="!isLoggedIn">
       @if(this.currentUrl !== '/login') {
         <a routerLink="/login">Zaloguj</a>
@@ -22,11 +15,14 @@
     </div>  
     <div *ngIf="isLoggedIn">
       @if(this.currentUrl !== '/login') {
-        <a routerLink="/login">Wyloguj</a>
+        <a (click)="logout()">Wyloguj</a>
       } 
       @if(this.currentUrl !== '/register') {
         <a routerLink="/register">Historia wyszukiwania</a>
       } 
+          @if(this.currentUrl !== '/history') {
+      <a routerLink="/history">Historia</a>
+      }
     </div>  
     <div>
     @if(this.currentUrl !== '/hazard') {

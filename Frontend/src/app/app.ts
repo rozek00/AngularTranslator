@@ -30,6 +30,10 @@ export class App implements OnInit {
   get isLoggedIn(): boolean {
     return this.auth.isLoggedIn();
   }
+  
+  logout() {
+    this.auth.logout();
+  }
 
   protected title = 'Frontend';
 }
