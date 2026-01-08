@@ -16,9 +16,10 @@ export class TranslationHistory implements OnInit {
   loading = false;
   error = '';
 
-  editingId: string | null = null;
+  editingId: number | null = null;
   editOriginal = '';
   editTranslated = '';
+
   constructor(private historyService: HistoryService) {}
 
   ngOnInit() {
@@ -39,27 +40,30 @@ export class TranslationHistory implements OnInit {
     });
   }
 
-  deleteEntry(id: string) {
+  deleteEntry(id: number) {
     this.historyService.deleteEntry(id).subscribe({
       next: () => {
         this.history = this.history.filter(h => h._id !== id);
-      }
+      },
+      error: (err) => console.error('Błąd przy usuwaniu:', err)
     });
   }
 
   clearAll() {
     if (!confirm('Usunąć całą historię?')) return;
     this.historyService.clearHistory().subscribe({
-      next: () => this.history = []
+      next: () => this.history = [],
+      error: (err) => console.error('Błąd przy czyszczeniu historii:', err)
     });
   }
 
-  formatDate(date: string): string {
-    return new Date(date).toLocaleString('pl-PL');
+  formatDate(date: string | Date): string {
+    const d = date instanceof Date ? date : new Date(date);
+    return d.toLocaleString('pl-PL');
   }
 
   startEdit(entry: HistoryEntry) {
-    this.editingId = entry._id;
+    this.editingId = entry._id; // number
     this.editOriginal = entry.originalText;
     this.editTranslated = entry.translatedText;
   }
@@ -70,16 +74,17 @@ export class TranslationHistory implements OnInit {
 
   saveEdit(entry: HistoryEntry) {
     this.historyService.updateEntry(
-      entry._id,
+      entry._id, // number
       this.editOriginal,
       this.editTranslated,
       entry.targetLang
     ).subscribe({
       next: (updated) => {
         const index = this.history.findIndex(h => h._id === entry._id);
-        this.history[index] = updated;
+        if (index !== -1) this.history[index] = updated;
         this.editingId = null;
-      }
+      },
+      error: (err) => console.error('Błąd przy edycji:', err)
     });
   }
 }

@@ -1,39 +1,49 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 export interface HistoryEntry {
-  _id: string;
-  userId: string;
+  _id: number;
+  userId: number;
   originalText: string;
   translatedText: string;
   targetLang: string;
-  createdAt: string;
+  createdAt: Date;
+}
+
+export interface ApiMessageResponse {
+  message: string;
 }
 
 @Injectable({
   providedIn: 'root'
 })
 export class HistoryService {
-  private apiUrl = 'http://localhost:3000/history';
-  private userId: string;
+  private readonly apiUrl = 'http://localhost:3000/history';
+  private readonly userId: number;
 
   constructor(private http: HttpClient) {
-    // Tymczasowy ID - później podmienicie na prawdziwego usera
-    this.userId = localStorage.getItem('visitorId') || this.generateId();
-  }
+    const token = localStorage.getItem('token');
+    if (!token) throw new Error('Nie jesteś zalogowany!');
 
-  private generateId(): string {
-    const id = 'visitor_' + Math.random().toString(36).substring(2, 10);
-    localStorage.setItem('visitorId', id);
-    return id;
+    const payload = JSON.parse(atob(token.split('.')[1]));
+    this.userId = payload.id;
   }
 
   getHistory(): Observable<HistoryEntry[]> {
-    return this.http.get<HistoryEntry[]>(`${this.apiUrl}/${this.userId}`);
+    return this.http
+      .get<HistoryEntry[]>(`${this.apiUrl}/${this.userId}`)
+      .pipe(
+        map(entries => entries.map(e => ({ ...e, createdAt: new Date(e.createdAt) })))
+      );
   }
 
-  addToHistory(originalText: string, translatedText: string, targetLang: string): Observable<HistoryEntry> {
+  addToHistory(
+    originalText: string,
+    translatedText: string,
+    targetLang: string
+  ): Observable<HistoryEntry> {
     return this.http.post<HistoryEntry>(this.apiUrl, {
       userId: this.userId,
       originalText,
@@ -42,19 +52,24 @@ export class HistoryService {
     });
   }
 
-  deleteEntry(id: string): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/${id}`);
+  deleteEntry(id: number): Observable<ApiMessageResponse> {
+    return this.http.delete<ApiMessageResponse>(`${this.apiUrl}/${id}`);
   }
 
-  clearHistory(): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/user/${this.userId}`);
+  clearHistory(): Observable<ApiMessageResponse> {
+    return this.http.delete<ApiMessageResponse>(`${this.apiUrl}/user/${this.userId}`);
   }
 
-  updateEntry(id: string, originalText: string, translatedText: string, targetLang: string): Observable<HistoryEntry> {
-  return this.http.put<HistoryEntry>(`${this.apiUrl}/${id}`, {
-    originalText,
-    translatedText,
-    targetLang
-  });
-}
+  updateEntry(
+    id: number,
+    originalText: string,
+    translatedText: string,
+    targetLang: string
+  ): Observable<HistoryEntry> {
+    return this.http.put<HistoryEntry>(`${this.apiUrl}/${id}`, {
+      originalText,
+      translatedText,
+      targetLang
+    });
+  }
 }

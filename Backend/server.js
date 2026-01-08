@@ -16,7 +16,8 @@ mongoose.connect(process.env.MONGO_URI)
   .catch(err => console.error('Błąd MongoDB:', err));
 
 const translationHistorySchema = new mongoose.Schema({
-  userId: { type: String, default: 'guest' },
+  _id: Number,
+  userId: { type: Number, default: 'guest' },
   originalText: { type: String, required: true },
   translatedText: { type: String, required: true },
   targetLang: { type: String, required: true },
@@ -58,9 +59,17 @@ app.get('/history/:userId', async (req, res) => {
 app.post('/history', async (req, res) => {
   const { userId, originalText, translatedText, targetLang } = req.body;
   try {
-    const entry = new TranslationHistory({ userId, originalText, translatedText, targetLang });
+    const lastEntry = await TranslationHistory.findOne().sort({ _id: -1 });
+    const newId = lastEntry ? lastEntry._id + 1 : 1;
+
+    const entry = new TranslationHistory({
+        _id: newId,
+        userId,
+        originalText,
+        translatedText,
+        targetLang
+    });
     await entry.save();
-    res.status(201).json(entry);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -98,7 +107,6 @@ app.put('/history/:id', async (req, res) => {
   }
 });
 
-app.listen(3000, () => console.log('API działa na http://localhost:3000'));
 app.get('/users', async (req, res) => {
     try {
         const users = await getUsers();
