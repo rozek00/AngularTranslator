@@ -37,7 +37,7 @@ export class HistoryService {
 }
   
   getHistory(): Observable<HistoryEntry[]> {
-    if(this.userId == null){
+    if(this.userId != null){
       return this.http
       .get<HistoryEntry[]>(`${this.apiUrl}/${this.userId}`)
       .pipe(
@@ -54,7 +54,8 @@ export class HistoryService {
     translatedText: string,
     targetLang: string
   ): Observable<HistoryEntry> {
-    if(this.userId == null){
+    if(this.userId != null){
+      console.log(this.userId);
       return this.http.post<HistoryEntry>(this.apiUrl, {
       userId: this.userId,
       originalText,
@@ -67,7 +68,7 @@ export class HistoryService {
   }
 
   deleteEntry(id: number): Observable<ApiMessageResponse> {
-    if(this.userId == null){
+    if(this.userId != null){
       return this.http.delete<ApiMessageResponse>(`${this.apiUrl}/${id}`);
     }
     else{
@@ -76,7 +77,7 @@ export class HistoryService {
   }
 
   clearHistory(): Observable<ApiMessageResponse> {
-    if(this.userId == null){
+    if(this.userId != null){
       return this.http.delete<ApiMessageResponse>(`${this.apiUrl}/user/${this.userId}`);
     }
     else{
@@ -90,7 +91,7 @@ export class HistoryService {
     translatedText: string,
     targetLang: string
   ): Observable<HistoryEntry> {
-    if(this.userId == null){
+    if(this.userId != null){
       return this.http.put<HistoryEntry>(`${this.apiUrl}/${id}`, {
         originalText,
         translatedText,

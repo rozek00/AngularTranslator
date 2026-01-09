@@ -23,8 +23,6 @@ export class LogService {
   }
 
   create(email: string, password: string){
-          console.log(`${this.apiUrl}/register`);
-    console.log(email, password)
     return this.http.post<Response>(`${this.apiUrl}/register`, {email, password});
   }
 }

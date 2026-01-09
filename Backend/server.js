@@ -16,8 +16,7 @@ mongoose.connect(process.env.MONGO_URI)
   .catch(err => console.error('Błąd MongoDB:', err));
 
 const translationHistorySchema = new mongoose.Schema({
-  _id: Number,
-  userId: { type: Number, default: 'guest' },
+  userId: { type: Number},
   originalText: { type: String, required: true },
   translatedText: { type: String, required: true },
   targetLang: { type: String, required: true },
@@ -57,19 +56,20 @@ app.get('/history/:userId', async (req, res) => {
 });
 
 app.post('/history', async (req, res) => {
+      console.log("wut0");
+
   const { userId, originalText, translatedText, targetLang } = req.body;
   try {
-    const lastEntry = await TranslationHistory.findOne().sort({ _id: -1 });
-    const newId = lastEntry ? lastEntry._id + 1 : 1;
-
+    console.log("wut");
     const entry = new TranslationHistory({
-        _id: newId,
         userId,
         originalText,
         translatedText,
         targetLang
     });
     await entry.save();
+        console.log("wut1");
+
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

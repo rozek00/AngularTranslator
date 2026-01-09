@@ -27,9 +27,7 @@ export class Logingg {
   
   constructor(private auth: LogService, private route: Router ) {}
 
-  loggingLogic() {
-    console.log('CLICK', this.Login, this.Password);
-    
+  loggingLogic() {    
     this.auth.login(this.Login, this.Password).subscribe({
       next: (res) => {
         localStorage.setItem('token', res.token);

@@ -29,7 +29,6 @@ const addUser = async (email, password) => {
 const getUsers = async () => {
     try {
         const users = await User.find({}, '-password'); 
-        console.log("dzialajj");
         return users;
     } catch (err) {
         throw err;
@@ -39,6 +38,8 @@ const getUsers = async () => {
 
 const loginUser = async (email, password) => {
     const user = await User.findOne({ email });
+    console.log("1");
+    console.log(user.toJSON());
     if (!user) {
         throw new Error("Nieprawidłowy email lub hasło");
     }
@@ -48,7 +49,7 @@ const loginUser = async (email, password) => {
     }
 
     const token = jwt.sign(
-        { id: user._id, email: user.email },
+        { id: user.get('id'), email: user.email },
         JWT_SECRET,
         { expiresIn: '1h' } 
     );

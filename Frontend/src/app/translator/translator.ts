@@ -38,7 +38,7 @@ export class TranslatorComponent {
         this.translatedText = res.translations[0].text;
 
         const token = localStorage.getItem('token');
-        if (!token) {
+        if (token) {
         this.historyService.addToHistory(
           wordToTranslate,
           this.translatedText,
