@@ -25,18 +25,18 @@ export class Registration {
     this.SecondPassword = val;
   }
 
-  constructor(private auth: LogService, private route: Router ) {}
+  constructor(private auth: LogService, private router: Router ) {}
 
   RegisterLogic() {
     if(this.Password !== this.SecondPassword){
       console.log("zle");
       return;
     }
-    console.log("dobrze");
 
     this.auth.create(this.Login,this.Password).subscribe({
         next: (res) =>{
-          this.route.navigate(['/login']);
+          console.log(res)
+          this.router.navigate(['/dashboard/login']);
         },
         error: (err) => console.error('Błąd logowania:', err)
     })

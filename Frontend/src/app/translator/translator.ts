@@ -37,12 +37,15 @@ export class TranslatorComponent {
       next: (res) => {
         this.translatedText = res.translations[0].text;
 
+        const token = localStorage.getItem('token');
+        if (!token) {
         this.historyService.addToHistory(
           wordToTranslate,
           this.translatedText,
           langcode
         ).subscribe();
-      },
+      }
+    },
       error: (err) => console.error(err)
     });
   }

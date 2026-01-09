@@ -118,8 +118,10 @@ app.get('/users', async (req, res) => {
 
 app.post('/register', async (req, res) => {
     try {
-        const user = await addUser(req.body);
-        res.status(201).json(user);
+      console.log("uwuw");
+        const { email, password } = req.body;
+        await addUser(email, password);
+        res.status(201).json({ message: "zarejestrowano" });
     } catch (err) {
         res.status(500).json({ error: err.message });
     }

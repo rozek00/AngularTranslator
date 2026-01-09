@@ -16,7 +16,7 @@ async function createUserEntity() {
         const newId = lastUser ? lastUser._id + 1 : 1;
         
         const user = new User({
-        _id: newId,
+        id: newId,
         email: 'jan@example.com',
         password: hashedPassword
         });

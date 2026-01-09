@@ -4,27 +4,22 @@
       @if(this.currentUrl !== '/') {
         <a routerLink="/">Tłumacz</a>
       } 
-    </div>
-    <div *ngIf="!isLoggedIn">
+    @if(isLoggedIn){
+      @if(this.currentUrl !== '/login') {
+        <a (click)="logout()">Wyloguj</a>
+      }
+      @if(this.currentUrl !== '/history') {
+        <a routerLink="/history">Historia wyszukiwania</a>
+      }
+    }
+    @if(!isLoggedIn){
       @if(this.currentUrl !== '/login') {
         <a routerLink="/login">Zaloguj</a>
       } 
       @if(this.currentUrl !== '/register') {
         <a routerLink="/register">Zarejestruj</a>
-      } 
-    </div>  
-    <div *ngIf="isLoggedIn">
-      @if(this.currentUrl !== '/login') {
-        <a (click)="logout()">Wyloguj</a>
-      } 
-      @if(this.currentUrl !== '/register') {
-        <a routerLink="/register">Historia wyszukiwania</a>
-      } 
-          @if(this.currentUrl !== '/history') {
-      <a routerLink="/history">Historia</a>
       }
-    </div>  
-    <div>
+    }
     @if(this.currentUrl !== '/hazard') {
       <a routerLink="/hazard">Hazard Dla Znudzonych</a>
     }

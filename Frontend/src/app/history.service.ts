@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { Expansion } from '@angular/compiler';
 
 export interface HistoryEntry {
   _id: number;
@@ -21,22 +22,31 @@ export interface ApiMessageResponse {
 })
 export class HistoryService {
   private readonly apiUrl = 'http://localhost:3000/history';
-  private readonly userId: number;
+  private readonly userId: number | null = null;
 
   constructor(private http: HttpClient) {
     const token = localStorage.getItem('token');
-    if (!token) throw new Error('Nie jesteś zalogowany!');
-
+    if (token) {
     const payload = JSON.parse(atob(token.split('.')[1]));
     this.userId = payload.id;
   }
-
+  else{
+    console.warn('Nieprawidłowy token, działamy w trybie offline');
+    this.userId = null;
+  }
+}
+  
   getHistory(): Observable<HistoryEntry[]> {
-    return this.http
+    if(this.userId == null){
+      return this.http
       .get<HistoryEntry[]>(`${this.apiUrl}/${this.userId}`)
       .pipe(
         map(entries => entries.map(e => ({ ...e, createdAt: new Date(e.createdAt) })))
       );
+    }
+    else{
+      throw new Error("Nie zalogowano");
+    }
   }
 
   addToHistory(
@@ -44,20 +54,34 @@ export class HistoryService {
     translatedText: string,
     targetLang: string
   ): Observable<HistoryEntry> {
-    return this.http.post<HistoryEntry>(this.apiUrl, {
+    if(this.userId == null){
+      return this.http.post<HistoryEntry>(this.apiUrl, {
       userId: this.userId,
       originalText,
       translatedText,
-      targetLang
-    });
+      targetLang});
+    }
+    else{
+      throw new Error("Nie zalogowano");
+    }
   }
 
   deleteEntry(id: number): Observable<ApiMessageResponse> {
-    return this.http.delete<ApiMessageResponse>(`${this.apiUrl}/${id}`);
+    if(this.userId == null){
+      return this.http.delete<ApiMessageResponse>(`${this.apiUrl}/${id}`);
+    }
+    else{
+      throw new Error("Nie zalogowano");
+    }
   }
 
   clearHistory(): Observable<ApiMessageResponse> {
-    return this.http.delete<ApiMessageResponse>(`${this.apiUrl}/user/${this.userId}`);
+    if(this.userId == null){
+      return this.http.delete<ApiMessageResponse>(`${this.apiUrl}/user/${this.userId}`);
+    }
+    else{
+      throw new Error("Nie zalogowano");
+    }
   }
 
   updateEntry(
@@ -66,10 +90,15 @@ export class HistoryService {
     translatedText: string,
     targetLang: string
   ): Observable<HistoryEntry> {
-    return this.http.put<HistoryEntry>(`${this.apiUrl}/${id}`, {
-      originalText,
-      translatedText,
-      targetLang
-    });
+    if(this.userId == null){
+      return this.http.put<HistoryEntry>(`${this.apiUrl}/${id}`, {
+        originalText,
+        translatedText,
+        targetLang
+      });
+    }
+    else{
+      throw new Error("Nie zalogowano");
+    }
   }
 }

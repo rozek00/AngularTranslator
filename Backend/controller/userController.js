@@ -4,19 +4,22 @@ const jwt = require('jsonwebtoken');
 const JWT_SECRET = process.env.JWT_SECRET;
 require('dotenv').config();
 
-const addUser = async (userData) => {
+const addUser = async (email, password) => {
     try {
         const saltRounds = parseInt(process.env.saltRounds, 10);
-        const hashedPassword = await bcrypt.hash(userData.password, saltRounds);
+        const hashedPassword = await bcrypt.hash(password, saltRounds);
+
+        const lastUser = await User.findOne().sort({ id: -1 }); 
+        const newId = lastUser ? lastUser.id + 1 : 1;
 
         const user = new User({
-            email: userData.email,
+            id: newId,
+            email: email,
             password: hashedPassword
         });
 
         await user.save();
         console.log('Użytkownik zapisany!');
-        return user; 
     } catch (err) {
         console.error('Błąd przy dodawaniu użytkownika:', err);
         throw err;
