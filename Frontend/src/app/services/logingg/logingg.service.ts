@@ -21,4 +21,8 @@ export class LogService {
   isLoggedIn(): boolean {
     return !!localStorage.getItem('token');
   }
+
+  create(email: string, password: string){
+    return this.http.post(`${this.apiUrl}/register`, {email, password});
+  }
 }

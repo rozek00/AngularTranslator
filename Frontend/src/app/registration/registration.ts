@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { Loginfield } from '../loginfield/loginfield';
 import { Passwordfield } from '../passwordfield/passwordfield';
+import { LogService } from '../services/logingg/logingg.service'
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-registration',
@@ -22,11 +24,21 @@ export class Registration {
   handleSecondPassword(val: string) {
     this.SecondPassword = val;
   }
+
+  constructor(private auth: LogService, private route: Router ) {}
+
   RegisterLogic() {
     if(this.Password !== this.SecondPassword){
-      //dodajcie jakis komunikat w komponenie
+      console.log("zle");
       return;
     }
-    //wasza robota
+    console.log("dobrze");
+
+    this.auth.create(this.Login,this.Password).subscribe({
+        next: (res) =>{
+          this.route.navigate(['/login']);
+        },
+        error: (err) => console.error('Błąd logowania:', err)
+    })
   }
 }
