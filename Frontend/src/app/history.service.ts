@@ -22,24 +22,29 @@ export interface ApiMessageResponse {
 })
 export class HistoryService {
   private readonly apiUrl = 'http://localhost:3000/history';
-  private readonly userId: number | null = null;
+  //private readonly userId: number | null = null;
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient){}
+  
+  private getUserId() : number | null{
     const token = localStorage.getItem('token');
     if (token) {
-    const payload = JSON.parse(atob(token.split('.')[1]));
-    this.userId = payload.id;
-  }
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      return payload.id;
+    }
   else{
     console.warn('Nieprawidłowy token, działamy w trybie offline');
-    this.userId = null;
+    return null;
+    }
   }
-}
-  
+
   getHistory(): Observable<HistoryEntry[]> {
-    if(this.userId != null){
+    const userId = this.getUserId();
+
+    if(userId != null){
+      console.log(`${this.apiUrl}/${userId}`);
       return this.http
-      .get<HistoryEntry[]>(`${this.apiUrl}/${this.userId}`)
+      .get<HistoryEntry[]>(`${this.apiUrl}/${userId}`)
       .pipe(
         map(entries => entries.map(e => ({ ...e, createdAt: new Date(e.createdAt) })))
       );
@@ -54,10 +59,12 @@ export class HistoryService {
     translatedText: string,
     targetLang: string
   ): Observable<HistoryEntry> {
-    if(this.userId != null){
-      console.log(this.userId);
+    const userId = this.getUserId();
+
+    if(userId != null){
+      console.log(userId);
       return this.http.post<HistoryEntry>(this.apiUrl, {
-      userId: this.userId,
+      userId: userId,
       originalText,
       translatedText,
       targetLang});
@@ -68,7 +75,9 @@ export class HistoryService {
   }
 
   deleteEntry(id: number): Observable<ApiMessageResponse> {
-    if(this.userId != null){
+    const userId = this.getUserId();
+
+    if(userId != null){
       return this.http.delete<ApiMessageResponse>(`${this.apiUrl}/${id}`);
     }
     else{
@@ -77,8 +86,10 @@ export class HistoryService {
   }
 
   clearHistory(): Observable<ApiMessageResponse> {
-    if(this.userId != null){
-      return this.http.delete<ApiMessageResponse>(`${this.apiUrl}/user/${this.userId}`);
+    const userId = this.getUserId();
+
+    if(userId != null){
+      return this.http.delete<ApiMessageResponse>(`${this.apiUrl}/user/${userId}`);
     }
     else{
       throw new Error("Nie zalogowano");
@@ -91,7 +102,9 @@ export class HistoryService {
     translatedText: string,
     targetLang: string
   ): Observable<HistoryEntry> {
-    if(this.userId != null){
+    const userId = this.getUserId();
+
+    if(userId != null){
       return this.http.put<HistoryEntry>(`${this.apiUrl}/${id}`, {
         originalText,
         translatedText,

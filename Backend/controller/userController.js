@@ -38,8 +38,6 @@ const getUsers = async () => {
 
 const loginUser = async (email, password) => {
     const user = await User.findOne({ email });
-    console.log("1");
-    console.log(user.toJSON());
     if (!user) {
         throw new Error("Nieprawidłowy email lub hasło");
     }

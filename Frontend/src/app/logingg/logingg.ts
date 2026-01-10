@@ -30,6 +30,7 @@ export class Logingg {
   loggingLogic() {    
     this.auth.login(this.Login, this.Password).subscribe({
       next: (res) => {
+        console.log(res.token);
         localStorage.setItem('token', res.token);
           alert('Zalogowano pomyślnie!');   
           this.route.navigate(['/dashboard']);
@@ -40,5 +41,6 @@ export class Logingg {
 
   logout() {
     this.auth.logout();
+    this.route.navigate(['/dashboard']);
   }
 }

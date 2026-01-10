@@ -33,6 +33,7 @@ export class App implements OnInit {
   
   logout() {
     this.auth.logout();
+    this.router.navigate(['/dashboard']);
   }
 
   protected title = 'Frontend';

@@ -56,11 +56,8 @@ app.get('/history/:userId', async (req, res) => {
 });
 
 app.post('/history', async (req, res) => {
-      console.log("wut0");
-
   const { userId, originalText, translatedText, targetLang } = req.body;
   try {
-    console.log("wut");
     const entry = new TranslationHistory({
         userId,
         originalText,
@@ -68,7 +65,6 @@ app.post('/history', async (req, res) => {
         targetLang
     });
     await entry.save();
-        console.log("wut1");
 
   } catch (err) {
     res.status(500).json({ error: err.message });
