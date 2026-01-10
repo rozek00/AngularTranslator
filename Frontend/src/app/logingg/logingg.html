@@ -4,9 +4,11 @@
 			<div class="auth-title">Logowanie</div>
 			<div class="field-block">
 				<app-loginfield (valueChanged)="handleLogin($event)"></app-loginfield>
+				<app-error-message [message]="errorMessageLogin"></app-error-message>
 			</div>
 			<div class="field-block">
 				<app-passwordfield (valueChanged)="handlePassword($event)"></app-passwordfield>
+				<app-error-message [message]="errorMessagePassowrd"></app-error-message>
 			</div>
 			<div class="auth-actions">
 				<button class="btn-primary" (click)="loggingLogic()">Zaloguj</button>

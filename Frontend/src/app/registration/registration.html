@@ -4,6 +4,7 @@
 		<div>
 			<div class="field-block">
 				<app-loginfield (valueChanged)="handleLogin($event)"></app-loginfield>
+				<app-error-message [message]="errorMessageLogin"></app-error-message>
 			</div>
 		</div>
 		<div>
