@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterLink } from '@angular/router';
+import { RouterLink, ActivatedRoute, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { HistoryService, HistoryEntry } from '../history.service';
+import { HistoryService, HistoryEntry, SortOrder } from '../history.service';
 
 @Component({
   selector: 'app-translation-history',
@@ -16,19 +16,32 @@ export class TranslationHistory implements OnInit {
   loading = false;
   error = '';
 
+  currentSortOrder: SortOrder = 1;
+
   editingId: number | null = null;
   editOriginal = '';
   editTranslated = '';
 
-  constructor(private historyService: HistoryService) {}
+  constructor(private historyService: HistoryService,private route: ActivatedRoute,private router: Router) {}
 
   ngOnInit() {
+    this.route.params
+    .subscribe(params => {
+    const sortParam = params['sortOrder'];
+    if (sortParam === '0' || sortParam === '1') {
+      this.currentSortOrder = parseInt(sortParam, 10) as SortOrder;
+    } else {
+      this.currentSortOrder = 1;
+      this.router.navigate(['/history/1'], { replaceUrl: true });
+      return;
+    }
     this.loadHistory();
+    });
   }
 
   loadHistory() {
     this.loading = true;
-    this.historyService.getHistory().subscribe({
+    this.historyService.getHistory(this.currentSortOrder).subscribe({
       next: (data) => {
         this.history = data;
         this.loading = false;
@@ -38,6 +51,16 @@ export class TranslationHistory implements OnInit {
         this.loading = false;
       }
     });
+  }
+
+  setSortOrder(order: SortOrder) {
+    if (order !== this.currentSortOrder) {
+      this.router.navigate(['/history', order]);
+    }
+  }
+
+  get sortOrderLabel(): string {
+    return this.currentSortOrder === 1 ? 'Najnowsze' : 'Najstarsze';
   }
 
   deleteEntry(id: number) {
@@ -63,7 +86,7 @@ export class TranslationHistory implements OnInit {
   }
 
   startEdit(entry: HistoryEntry) {
-    this.editingId = entry._id; // number
+    this.editingId = entry._id; 
     this.editOriginal = entry.originalText;
     this.editTranslated = entry.translatedText;
   }
@@ -74,7 +97,7 @@ export class TranslationHistory implements OnInit {
 
   saveEdit(entry: HistoryEntry) {
     this.historyService.updateEntry(
-      entry._id, // number
+      entry._id,
       this.editOriginal,
       this.editTranslated,
       entry.targetLang

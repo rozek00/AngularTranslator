@@ -9,7 +9,8 @@ export const routes: Routes = [
   { path: '', component: TranslatorComponent },
   { path: 'login', component: Logingg },
   { path: 'register', component: Registration },
-  { path: 'history', component: TranslationHistory },
+  { path: 'history', redirectTo: 'history/1', pathMatch: 'full'  },
+  { path: 'history/:sortOrder', component: TranslationHistory },
   {path: 'hazard', component: HazardDlaZnudzonych},
   { path: '**', redirectTo: '' }
 ];

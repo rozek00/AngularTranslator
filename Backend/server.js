@@ -46,8 +46,11 @@ app.post('/translate', async (req, res) => {
 
 app.get('/history/:userId', async (req, res) => {
   try {
+    const sortParam = req.query.sort;
+    const sortOrder = sortParam === '0' ? 1 : -1; 
+
     const history = await TranslationHistory.find({ userId: req.params.userId })
-      .sort({ createdAt: -1 })
+      .sort({ createdAt: sortOrder  })
       .limit(100);
     res.json(history);
   } catch (err) {

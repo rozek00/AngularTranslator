@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { Expansion } from '@angular/compiler';
 
 export interface HistoryEntry {
   _id: number;
@@ -17,12 +16,13 @@ export interface ApiMessageResponse {
   message: string;
 }
 
+export type SortOrder = 0 | 1;
+
 @Injectable({
   providedIn: 'root'
 })
 export class HistoryService {
   private readonly apiUrl = 'http://localhost:3000/history';
-  //private readonly userId: number | null = null;
 
   constructor(private http: HttpClient){}
   
@@ -38,13 +38,15 @@ export class HistoryService {
     }
   }
 
-  getHistory(): Observable<HistoryEntry[]> {
+  getHistory(sortOrder: SortOrder = 1): Observable<HistoryEntry[]> {
     const userId = this.getUserId();
 
     if(userId != null){
       console.log(`${this.apiUrl}/${userId}`);
       return this.http
-      .get<HistoryEntry[]>(`${this.apiUrl}/${userId}`)
+      .get<HistoryEntry[]>(`${this.apiUrl}/${userId}`, {
+        params: {sort: String(sortOrder)}
+      })
       .pipe(
         map(entries => entries.map(e => ({ ...e, createdAt: new Date(e.createdAt) })))
       );

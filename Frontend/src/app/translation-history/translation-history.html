@@ -1,6 +1,15 @@
 <div class="history-container">
   <h1>Historia tłumaczeń</h1>
 
+  <div class="sort-panel"> 
+    <span class="sort-label">Sortuj:</span> 
+    <div class="sort-buttons"> 
+      <button class="sort-btn" [class.active]="currentSortOrder === 1" routerLink="/history/1" (click)="setSortOrder(1)">Najnowsze </button> 
+      <button class="sort-btn" [class.active]="currentSortOrder === 0" routerLink="/history/0" (click)="setSortOrder(0)">Najstarsze </button> 
+    </div> 
+    <span class="current-sort">Aktualnie: {{ sortOrderLabel }}</span> 
+  </div>
+
   @if (loading) {
     <div class="loading">Ładowanie...</div>
   }
