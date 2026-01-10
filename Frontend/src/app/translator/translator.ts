@@ -49,4 +49,5 @@ export class TranslatorComponent {
       error: (err) => console.error(err)
     });
   }
+
 }

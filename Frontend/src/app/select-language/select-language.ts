@@ -26,4 +26,13 @@ export class SelectLanguage {
       this.languageCodes = Object.keys(data);
     });
   }
+
+  RadomLan(){
+    const keys = Object.keys(this.languages);
+    const index = Math.floor(Math.random() * keys.length);
+    const code = keys[index];
+
+    const name = this.languages[code];
+
+    this.selectedLanguage = code;  }
 }
