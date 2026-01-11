@@ -3,6 +3,7 @@ import { OriginalWordArea } from '../original-word-area/original-word-area';
 import { TranslatedWordArea } from '../translated-word-area/translated-word-area';
 import { SelectLanguage } from '../select-language/select-language';
 import { TranslateService } from '../translate.service';
+import { HistoryService } from '../history.service';
 import { FormsModule } from '@angular/forms';
 
 @Component({
@@ -13,7 +14,10 @@ import { FormsModule } from '@angular/forms';
   styleUrls: ['./translator.css'],
 })
 export class TranslatorComponent {
-  constructor(private translateService: TranslateService) {}
+  constructor(
+    private translateService: TranslateService,
+    private historyService: HistoryService
+  ) {}
   translatedText: string = "";
   @ViewChild(OriginalWordArea) originalWordArea!: OriginalWordArea;
   @ViewChild(SelectLanguage) selectLanguage!: SelectLanguage;
@@ -32,8 +36,18 @@ export class TranslatorComponent {
     this.translateService.translate(wordToTranslate, langcode).subscribe({
       next: (res) => {
         this.translatedText = res.translations[0].text;
-      },
+
+        const token = localStorage.getItem('token');
+        if (token) {
+        this.historyService.addToHistory(
+          wordToTranslate,
+          this.translatedText,
+          langcode
+        ).subscribe();
+      }
+    },
       error: (err) => console.error(err)
     });
   }
+
 }

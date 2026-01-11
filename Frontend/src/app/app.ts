@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { RouterOutlet, RouterLink, Router, NavigationEnd } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { filter } from 'rxjs';
+import { LogService } from '../app/services/logingg/logingg.service'
+
 
 @Component({
   selector: 'app-root',
@@ -14,7 +16,7 @@ import { filter } from 'rxjs';
 export class App implements OnInit {
   currentUrl = '';
   loggedIn = false;
-  constructor(private router: Router) {}
+  constructor(private router: Router, private auth: LogService) {}
 
   ngOnInit() {
     this.currentUrl = this.router.url;
@@ -23,6 +25,15 @@ export class App implements OnInit {
       .subscribe((event: any) => {
         this.currentUrl = event.url;
       });
+  }
+
+  get isLoggedIn(): boolean {
+    return this.auth.isLoggedIn();
+  }
+  
+  logout() {
+    this.auth.logout();
+    this.router.navigate(['/dashboard']);
   }
 
   protected title = 'Frontend';

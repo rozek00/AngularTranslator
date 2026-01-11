@@ -1,0 +1,80 @@
+<div class="history-container">
+  <h1>Historia tłumaczeń</h1>
+
+  <div class="sort-panel"> 
+    <span class="sort-label">Sortuj:</span> 
+    <div class="sort-buttons"> 
+      <button class="sort-btn" [class.active]="currentSortOrder === 1" routerLink="/history/1" (click)="setSortOrder(1)">Najnowsze </button> 
+      <button class="sort-btn" [class.active]="currentSortOrder === 0" routerLink="/history/0" (click)="setSortOrder(0)">Najstarsze </button> 
+    </div> 
+    <span class="current-sort">Aktualnie: {{ sortOrderLabel }}</span> 
+  </div>
+
+  @if (loading) {
+    <div class="loading">Ładowanie...</div>
+  }
+
+  @if (error) {
+    <div class="error">{{ error }}</div>
+  }
+
+  @if (!loading && history.length === 0) {
+    <div class="empty">
+      <p>Brak tłumaczeń w historii.</p>
+      <a routerLink="/" class="btn-primary">Przetłumacz coś!</a>
+    </div>
+  }
+
+  @if (history.length > 0) {
+    <div class="history-actions">
+      <button class="btn-danger" (click)="clearAll()">Wyczyść wszystko</button>
+    </div>
+
+    <div class="history-list">
+      @for (entry of history; track entry._id) {
+        <div class="history-card">
+          <div class="history-header">
+            <span class="lang-badge">{{ entry.targetLang }}</span>
+            <span class="date">{{ formatDate(entry.createdAt) }}</span>
+            
+            @if (editingId !== entry._id) {
+              <button class="btn-edit" (click)="startEdit(entry)">Edit</button>
+            }
+            <button class="btn-delete" (click)="deleteEntry(entry._id)">✕</button>
+          </div>
+
+          @if (editingId !== entry._id) {
+            <div class="history-content">
+              <div class="text-block original">
+                <label>Oryginał:</label>
+                <p>{{ entry.originalText }}</p>
+              </div>
+              <div class="arrow">→</div>
+              <div class="text-block translated">
+                <label>Tłumaczenie:</label>
+                <p>{{ entry.translatedText }}</p>
+              </div>
+            </div>
+          }
+
+          @if (editingId === entry._id) {
+            <div class="edit-form">
+              <div class="edit-field">
+                <label>Oryginał:</label>
+                <input type="text" [(ngModel)]="editOriginal" />
+              </div>
+              <div class="edit-field">
+                <label>Tłumaczenie:</label>
+                <input type="text" [(ngModel)]="editTranslated" />
+              </div>
+              <div class="edit-actions">
+                <button class="btn-save" (click)="saveEdit(entry)">Zapisz</button>
+                <button class="btn-cancel" (click)="cancelEdit()">Anuluj</button>
+              </div>
+            </div>
+          }
+        </div>
+      }
+    </div>
+  }
+</div>

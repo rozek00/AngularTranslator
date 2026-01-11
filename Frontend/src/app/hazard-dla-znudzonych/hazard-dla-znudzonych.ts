@@ -12,7 +12,6 @@ export class HazardDlaZnudzonych {
 result = ['', '', ''];
   spinning = false;
 
-  // indicates last spin was win (all equal)
   isWin = false;
 
 spin() {
@@ -20,12 +19,10 @@ spin() {
   this.spinning = true;
   this.isWin = false;
 
-  // Quick visual cycling while spinning
   const interval = setInterval(() => {
     this.result = [this.randomSymbol(), this.randomSymbol(), this.randomSymbol()];
   }, 80);
 
-  // After short delay pick final values
   setTimeout(() => {
     clearInterval(interval);
     this.result = [this.randomSymbol(), this.randomSymbol(), this.randomSymbol()];

@@ -1,17 +1,29 @@
 <div class="translator-container">
   <nav>
-    @if(this.currentUrl !== '/') {
-      <a routerLink="/">Tłumacz</a>
-    } 
-    @if(this.currentUrl !== '/login') {
-      <a routerLink="/login">Zaloguj</a>
-    } 
-    @if(this.currentUrl !== '/register') {
-      <a routerLink="/register">Zarejestruj</a>
-    } 
+    <div>
+      @if(this.currentUrl !== '/') {
+        <a routerLink="/">Tłumacz</a>
+      } 
+    @if(isLoggedIn){
+      @if(this.currentUrl !== '/login') {
+        <a (click)="logout()">Wyloguj</a>
+      }
+      @if(this.currentUrl !== '/history') {
+        <a routerLink="/history">Historia wyszukiwania</a>
+      }
+    }
+    @if(!isLoggedIn){
+      @if(this.currentUrl !== '/login') {
+        <a routerLink="/login">Zaloguj</a>
+      } 
+      @if(this.currentUrl !== '/register') {
+        <a routerLink="/register">Zarejestruj</a>
+      }
+    }
     @if(this.currentUrl !== '/hazard') {
       <a routerLink="/hazard">Hazard Dla Znudzonych</a>
     }
+    </div>
   </nav>
   <router-outlet></router-outlet>
 </div>
