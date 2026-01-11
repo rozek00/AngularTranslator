@@ -13,6 +13,7 @@
 			</div>
 			<div class="field-block">
 				<app-passwordfield (valueChanged)="handleSecondPassword($event)"></app-passwordfield>
+				<app-error-message [message]="errorMessagePassowrd"></app-error-message>
 			</div>
 		</div>
 	</div>

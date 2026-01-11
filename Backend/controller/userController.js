@@ -19,22 +19,15 @@ const addUser = async (email, password) => {
         });
 
         await user.save();
-        console.log('Użytkownik zapisany!');
     } catch (err) {
-        console.error('Błąd przy dodawaniu użytkownika:', err);
+        if (err.code === 11000) {
+            const error = new Error('Email już istnieje');
+            error.statusCode = 409;
+            throw error;
+        }
         throw err;
     }
 };
-
-const getUsers = async () => {
-    try {
-        const users = await User.find({}, '-password'); 
-        return users;
-    } catch (err) {
-        throw err;
-    }
-};
-
 
 const loginUser = async (email, password) => {
     const user = await User.findOne({ email });

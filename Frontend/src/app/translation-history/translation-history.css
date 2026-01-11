@@ -233,3 +233,57 @@ h1 {
 .btn-cancel:hover {
   background: #5a6268;
 }
+
+.sort-panel {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 8px;
+  padding: 14px 18px;
+  background: #f9fafb;
+  border-radius: 12px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
+  font-family: Arial, sans-serif;
+}
+
+.sort-label {
+  font-size: 14px;
+  font-weight: 500;
+  color: #6b7280;
+}
+
+.sort-buttons {
+  display: flex;
+  background: #e5e7eb;
+  border-radius: 10px;
+  padding: 4px;
+}
+
+.sort-btn {
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  border: none;
+  background: transparent;
+  color: #374151;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.sort-btn:hover {
+  background: rgba(59, 130, 246, 0.1);
+  color: #2563eb;
+}
+
+.sort-btn.active {
+  background: #3b82f6;
+  color: #ffffff;
+  box-shadow: 0 3px 8px rgba(59, 130, 246, 0.4);
+}
+
+.current-sort {
+  margin-left: auto;
+  font-size: 13px;
+  color: #4b5563;
+}

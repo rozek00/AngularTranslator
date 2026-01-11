@@ -55,10 +55,9 @@ export class Logingg {
 
     this.auth.login(this.Login, this.Password).subscribe({
       next: (res) => {
-        console.log(res.token);
         localStorage.setItem('token', res.token);
-          alert('Zalogowano pomyślnie!');   
-          this.route.navigate(['/dashboard']);
+        alert('Zalogowano pomyślnie!');   
+        this.route.navigate(['/dashboard']);
       },
       error: (err) => this.errorMessagePassowrd = "Bledny login lub haslo"
     });

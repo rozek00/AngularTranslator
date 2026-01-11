@@ -40,7 +40,7 @@ app.post('/translate', async (req, res) => {
 
     res.json(response.data);
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    res.status(400).json({ error: err.message });
   }
 });
 
@@ -54,7 +54,7 @@ app.get('/history/:userId', async (req, res) => {
       .limit(100);
     res.json(history);
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    res.status(400).json({ error: err.message });
   }
 });
 
@@ -70,7 +70,7 @@ app.post('/history', async (req, res) => {
     await entry.save();
 
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    res.status(400).json({ error: err.message });
   }
 });
 
@@ -79,7 +79,7 @@ app.delete('/history/:id', async (req, res) => {
     await TranslationHistory.findByIdAndDelete(req.params.id);
     res.json({ message: 'Usunięto' });
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    res.status(400).json({ error: err.message });
   }
 });
 
@@ -88,7 +88,7 @@ app.delete('/history/user/:userId', async (req, res) => {
     await TranslationHistory.deleteMany({ userId: req.params.userId });
     res.json({ message: 'Wyczyszczono' });
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    res.status(400).json({ error: err.message });
   }
 });
 
@@ -102,27 +102,22 @@ app.put('/history/:id', async (req, res) => {
     );
     res.json(updated);
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    res.status(400).json({ error: err.message });
   }
-});
-
-app.get('/users', async (req, res) => {
-    try {
-        const users = await getUsers();
-        res.json(users);
-    } catch (err) {
-        res.status(500).json({ error: err.message });
-    }
 });
 
 app.post('/register', async (req, res) => {
     try {
-      console.log("uwuw");
         const { email, password } = req.body;
         await addUser(email, password);
         res.status(201).json({ message: "zarejestrowano" });
     } catch (err) {
-        res.status(500).json({ error: err.message });
+        if (err.statusCode == 409) {
+            return res.status(409).json({
+                message: 'Użytkownik z takim emailem już istnieje'
+            });
+        }
+        res.status(400).json({ message: err.message });
     }
 });
 
@@ -132,7 +127,7 @@ app.post('/login', async (req, res) => {
         const token  = await loginUser(email, password);
         res.status(200).json({ token });
     } catch (err) {
-        res.status(400).json({ error: err.message });
+      res.status(400).json({ error: err.message });
     }
 });
 

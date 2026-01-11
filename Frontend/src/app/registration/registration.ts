@@ -18,19 +18,30 @@ export class Registration {
   Password = '';
   SecondPassword = '';
   errorMessageLogin = '';
+  errorMessagePassowrd ='';
   emailPattern = /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/i;
 
 
   handleLogin(val: string) {
     if(this.emailPattern.test(val)){
       this.errorMessageLogin = '';
+      this.Password = '';
     }
     this.Login = val;
   }
   handlePassword(val: string) {
+    if(val.length < 6){
+      this.errorMessagePassowrd = '';
+    }
+
     this.Password = val;
   }
+
   handleSecondPassword(val: string) {
+    if(val.length < 6){
+      this.errorMessagePassowrd = '';
+    }
+
     this.SecondPassword = val;
   }
 
@@ -42,17 +53,29 @@ export class Registration {
       return;
     } 
     
+    if(this.Password.length < 6){
+      this.errorMessagePassowrd = 'Bledny format hasla';
+      return
+    }
+
     if(this.Password !== this.SecondPassword){
-      console.log("zle");
+      this.errorMessagePassowrd = 'Rozne hasla'; 
       return;
     }
 
+
     this.auth.create(this.Login,this.Password).subscribe({
         next: (res) =>{
-          console.log(res)
+          alert('Zarejestrowano pomyślnie!');   
           this.router.navigate(['/dashboard/login']);
         },
-        error: (err) => console.error('Błąd logowania:', err)
+        error: (err) => {
+          if (err.status === 409) {
+            this.errorMessageLogin = err.error.message;
+          } else {
+            this.errorMessageLogin = 'Cos poszlo nie tak';
+          }
+        }
     })
   }
 }
