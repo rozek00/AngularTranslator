@@ -67,7 +67,7 @@ export class Registration {
     this.auth.create(this.Login,this.Password).subscribe({
         next: (res) =>{
           alert('Zarejestrowano pomyślnie!');   
-          this.router.navigate(['/dashboard/login']);
+          this.router.navigate(['/login']);
         },
         error: (err) => {
           if (err.status === 409) {
