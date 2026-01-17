@@ -1,23 +1,36 @@
 <div class="auth-card">
-	<div class="auth-title">Rejestracja</div>
-	<div class="form-columns">
-		<div>
-			<div class="field-block">
-				<app-loginfield (valueChanged)="handleLogin($event)"></app-loginfield>
-				<app-error-message [message]="errorMessageLogin"></app-error-message>
-			</div>
-		</div>
-		<div>
-			<div class="field-block">
-				<app-passwordfield (valueChanged)="handlePassword($event)"></app-passwordfield>
-			</div>
-			<div class="field-block">
-				<app-passwordfield (valueChanged)="handleSecondPassword($event)"></app-passwordfield>
-				<app-error-message [message]="errorMessagePassowrd"></app-error-message>
-			</div>
-		</div>
-	</div>
-	<div class="auth-actions">
-		<button class="btn-primary" (click)="RegisterLogic()">Zarejestruj</button>
-	</div>
+  <div class="auth-title">Rejestracja</div>
+
+  <form [formGroup]="registerForm" (ngSubmit)="RegisterLogic()">
+    <div class="form-columns">
+      <div class="field-block">
+        <input type="text" placeholder="Login" formControlName="Login" />
+        <div *ngIf="registerForm.controls['Login'].touched && registerForm.controls['Login'].invalid">
+          <small *ngIf="registerForm.controls['Login'].errors?.['required']">Login jest wymagany.</small>
+          <small *ngIf="registerForm.controls['Login'].errors?.['pattern']">Niepoprawny format e-mail.</small>
+          <small *ngIf="registerForm.controls['Login'].errors?.['conflict']">Login już istnieje.</small>
+          <small *ngIf="registerForm.controls['Login'].errors?.['unknown']">Coś poszło nie tak.</small>
+        </div>
+      </div>
+
+      <div class="field-block">
+        <input type="password" placeholder="Hasło" formControlName="Password" />
+        <div *ngIf="registerForm.controls['Password'].touched && registerForm.controls['Password'].invalid">
+          <small *ngIf="registerForm.controls['Password'].errors?.['required']">Hasło jest wymagane.</small>
+          <small *ngIf="registerForm.controls['Password'].errors?.['minlength']">Hasło musi mieć min. 6 znaków.</small>
+        </div>
+      </div>
+
+      <div class="field-block">
+        <input type="password" placeholder="Powtórz hasło" formControlName="SecondPassword" />
+        <div *ngIf="registerForm.controls['SecondPassword'].touched && registerForm.errors?.['passwordsMismatch']">
+          <small>Hasła nie są identyczne.</small>
+        </div>
+      </div>
+    </div>
+
+    <div class="auth-actions">
+      <button type="submit" class="btn-primary">Zarejestruj</button>
+    </div>
+  </form>
 </div>

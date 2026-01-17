@@ -1,22 +1,33 @@
 <div class="auth-card">
-	<div class="auth-grid">
-		<div class="auth-left">
-			<div class="auth-title">Logowanie</div>
-			<div class="field-block">
-				<app-loginfield (valueChanged)="handleLogin($event)"></app-loginfield>
-				<app-error-message [message]="errorMessageLogin"></app-error-message>
-			</div>
-			<div class="field-block">
-				<app-passwordfield (valueChanged)="handlePassword($event)"></app-passwordfield>
-				<app-error-message [message]="errorMessagePassowrd"></app-error-message>
-			</div>
-			<div class="auth-actions">
-				<button class="btn-primary" (click)="loggingLogic()">Zaloguj</button>
-			</div>
-		</div>
-		<div class="auth-right">
-			<p class="note">Jeżeli nie masz konta, zarejestruj się.</p>
-		</div>
-	</div>
-</div>
+  <div class="auth-title">Logowanie</div>
 
+  <form [formGroup]="loginForm" (ngSubmit)="reactiveLogging()">
+
+    <div class="field-block">
+      <input type="text" placeholder="Login" formControlName="Login" />
+      <div *ngIf="loginForm.controls['Login'].invalid && loginForm.controls['Login'].touched" class="error-message">
+        {{ loginForm.controls['Login'].errors?.['required'] ? 'Login jest wymagany' : '' }}
+        {{ loginForm.controls['Login'].errors?.['pattern'] ? 'Nieprawidłowy format loginu' : '' }}
+      </div>
+    </div>
+
+    <div class="field-block">
+      <input type="password" placeholder="Hasło" formControlName="Password" />
+      <div *ngIf="loginForm.controls['Password'].invalid && loginForm.controls['Password'].touched" class="error-message">
+        {{ loginForm.controls['Password'].errors?.['required'] ? 'Hasło jest wymagane' : '' }}
+        {{ loginForm.controls['Password'].errors?.['minlength'] ? 'Hasło jest za krótkie' : '' }}
+      </div>
+    </div>
+
+    <div>
+      <label>
+        <input type="checkbox" formControlName="RememberMe" /> Zapamiętaj mnie
+      </label>
+    </div>
+
+    <div class="auth-actions">
+      <button type="submit" class="btn-primary">Zaloguj</button>
+    </div>
+
+  </form>
+</div>

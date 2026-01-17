@@ -1,65 +1,62 @@
 import { Component } from '@angular/core';
-import { Loginfield } from '../loginfield/loginfield';
-import { Passwordfield } from '../passwordfield/passwordfield';
-import { concatWith } from 'rxjs';
-import { AuthResponse } from '../interfaces/responses/loginResponse';
-import { LogService } from '../services/logingg/logingg.service'
+import { FormBuilder, FormGroup, Validators, AbstractControl, ValidationErrors, ValidatorFn, ReactiveFormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
-import { ErrorMesage } from '../error-message/error-message';
+import { LogService } from '../services/logingg/logingg.service';
 
 @Component({
   selector: 'app-logingg',
   standalone: true,
-  imports: [Loginfield,Passwordfield, ErrorMesage],
+  imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './logingg.html',
-  styleUrls: ['./logingg.css'],
+  styleUrls: ['./logingg.css']
 })
-
 export class Logingg {
-  Login = '';
-  Password = '';
-  errorMessageLogin = '';
-  errorMessagePassowrd = '';
-  emailPattern = /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/i;
+  loginForm: FormGroup;
 
+  constructor(private fb: FormBuilder, private auth: LogService, private route: Router) {
+    this.loginForm = this.fb.group({
+      Login: ['', [this.loginValidator()]],
+      Password: ['', [this.passwordValidator()]],
+      RememberMe: [false]  
+    });
+  }
 
-  handleLogin(val: string) {
-    if(this.emailPattern.test(val)){
-      this.errorMessageLogin = '';
-      this.errorMessagePassowrd = '';
+  loginValidator(): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      const value = control.value as string;
+      const emailPattern = /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/i;
+      if (!value) return { required: true };
+      return emailPattern.test(value) ? null : { invalidEmail: true };
+    };
+  }
+
+  passwordValidator(): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      const value = control.value as string;
+      if (!value) return { required: true };
+      if (value.length < 6) return { minLength: true };
+      if (!/\d/.test(value)) return { noNumber: true }; 
+      return null;
+    };
+  }
+
+  reactiveLogging() {
+    if (this.loginForm.invalid) {
+      this.loginForm.markAllAsTouched(); 
+      return;
     }
-    this.Login = val;
-  }
 
-  handlePassword(val: string) {
-    if(val.length < 6){
-      this.errorMessagePassowrd = '';
-    }
-    this.Password = val;
-  }
+    const login = this.loginForm.value.Login;
+    const password = this.loginForm.value.Password;
 
-  
-  constructor(private auth: LogService, private route: Router ) {}
-
-  loggingLogic() {  
-
-  if (!this.emailPattern.test(this.Login)) {
-    this.errorMessageLogin = 'Bledny format loginu'; 
-    return;
-  } 
-
-  if(this.Password.length < 6){
-    this.errorMessagePassowrd = 'Bledny format hasla';
-    return
-  }
-
-    this.auth.login(this.Login, this.Password).subscribe({
+    this.auth.login(login, password).subscribe({
       next: (res) => {
         localStorage.setItem('token', res.token);
-        alert('Zalogowano pomyślnie!');   
+        alert('Zalogowano pomyślnie!');
         this.route.navigate(['/dashboard']);
       },
-      error: (err) => this.errorMessagePassowrd = "Bledny login lub haslo"
+      error: () => alert('Błędny login lub hasło')
     });
   }
 
