@@ -1,2 +1,2 @@
 # AngularTranslator
-dupadupa123
+
